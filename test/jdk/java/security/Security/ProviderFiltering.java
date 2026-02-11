@@ -84,10 +84,10 @@ public class ProviderFiltering {
                     InvalidParameterException.class);
         }
 
-        String p = "SUN";
+        String p = "SUN", p2 = "OpenJCEPlus";
 
         // test alias
-        doit("Signature.NONEwithDSA", p);
+        doit("Signature.NONEwithDSA", p, p2);
 
         String sigService = "Signature.SHA256withDSA";
         // javadoc allows extra spaces in between
@@ -117,7 +117,7 @@ public class ProviderFiltering {
         // try non-attribute filters
         filters.clear();
         filters.put(sigService, "");
-        doit(filters, p);
+        doit(filters, p, p2);
         filters.put("Cipher.RC2", "");
         doit(filters);
 
@@ -130,9 +130,9 @@ public class ProviderFiltering {
                 customValue);
         Security.insertProviderAt(testProv, 1);
         // should find both TestProv and SUN and in this order
-        doit(sigService, pName, "SUN");
+        doit(sigService, pName, "SUN" ,p2);
         filters.put(sigService, "");
-        doit(filters, pName, "SUN");
+        doit(filters, pName, "SUN", p2);
 
         String specAttr = sigService + "  " + customKey + ":" + customValue;
         // should find only TestProv
