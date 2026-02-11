@@ -81,6 +81,7 @@ public class CheckSecurityProvider {
         }
         layer.findModule("jdk.crypto.cryptoki")
             .ifPresent(m -> expected.add("sun.security.pkcs11.SunPKCS11"));
+        expected.add("com.ibm.crypto.plus.provider.OpenJCEPlus");
 
         List<String> actual = Stream.of(Security.getProviders())
             .map(p -> p.getClass().getName())
