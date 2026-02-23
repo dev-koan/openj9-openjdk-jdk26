@@ -67,7 +67,9 @@ public class Properties {
         signer.prop(DOM_SIGNATURE_RANDOM, new SeededSecureRandom(2L));
         var s2 = getSignature(signer.sign("hello")); // deterministic two
 
-        Asserts.assertEqualsByteArray(s1, s1again);
+        // if (Security.getProvider("OpenJCEPlus") == null && Security.getProvider("OpenJCEPlusFIPS") == null)
+        System.out.println("hello");
+            Asserts.assertEqualsByteArray(s1, s1again);
         assertsAllDifferent(n1, n2, s1, s2);
 
         signer.prop(DOM_SIGNATURE_PROVIDER, Security.getProvider("SunJCE"));
