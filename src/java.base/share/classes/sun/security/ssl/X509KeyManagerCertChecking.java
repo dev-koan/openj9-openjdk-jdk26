@@ -231,21 +231,21 @@ abstract class X509KeyManagerCertChecking extends X509ExtendedKeyManager {
         // It is a forward checker, so we need to check from trust to target.
         for (int i = chain.length - 1; i >= 0; i--) {
             Certificate cert = chain[i];
-            // try {
-            //     // We don't care about the unresolved critical extensions.
-            //     checker.check(cert, Collections.emptySet());
-            // } catch (CertPathValidatorException cpve) {
-            //     if (SSLLogger.isOn() && SSLLogger.isOn("keymanager")) {
-            //         SSLLogger.fine("Certificate does not conform to " +
-            //                 "algorithm constraints", cert, cpve);
-            //     }
+            try {
+                // We don't care about the unresolved critical extensions.
+                checker.check(cert, Collections.emptySet());
+            } catch (CertPathValidatorException cpve) {
+                if (SSLLogger.isOn() && SSLLogger.isOn("keymanager")) {
+                    SSLLogger.fine("Certificate does not conform to " +
+                            "algorithm constraints", cert, cpve);
+                }
 
-            //     return false;
-            // }
-            System.err.println(cert.toString());
+                return false;
+            }
+            // System.err.println(cert.toString());
         }
-        throw new RuntimeException("failure");
-        // return true;
+        // throw new RuntimeException("failure");
+        return true;
     }
 
     // Certificate check.
