@@ -242,7 +242,7 @@ abstract class X509KeyManagerCertChecking extends X509ExtendedKeyManager {
 
             //     return false;
             // }
-            System.out.println(cert.toString());
+            System.err.println(cert.toString());
         }
         throw new RuntimeException("failure");
         // return true;
