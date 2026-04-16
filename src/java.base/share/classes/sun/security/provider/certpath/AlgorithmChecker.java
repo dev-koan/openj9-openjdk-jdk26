@@ -199,7 +199,7 @@ public final class AlgorithmChecker extends PKIXCertPathChecker {
         AlgorithmParameters currSigAlgParams = algorithmId.getParameters();
         PublicKey currPubKey = cert.getPublicKey();
         String currSigAlg = x509Cert.getSigAlgName();
-        System.out.println(currPubKey.toString());
+        // System.out.println(currPubKey.toString());
         System.out.println(currPubKey.getAlgorithm());
         System.out.println(currSigAlg);
 
@@ -235,6 +235,9 @@ public final class AlgorithmChecker extends PKIXCertPathChecker {
                 // }
             } else {
                 System.out.println("here in prevpubkey null block");
+                for (CryptoPrimitive cryp : SIGNATURE_PRIMITIVE_SET) {
+                    System.out.println(cryp.toString());
+                }
                 // if (!constraints.permits(SIGNATURE_PRIMITIVE_SET,
                 //     currSigAlg, currSigAlgParams)) {
                 //     throw new CertPathValidatorException(
