@@ -238,13 +238,13 @@ public final class AlgorithmChecker extends PKIXCertPathChecker {
                 for (CryptoPrimitive cryp : SIGNATURE_PRIMITIVE_SET) {
                     System.out.println(cryp.toString());
                 }
-                // if (!constraints.permits(SIGNATURE_PRIMITIVE_SET,
-                //     currSigAlg, currSigAlgParams)) {
-                //     throw new CertPathValidatorException(
-                //         "Algorithm constraints check failed on " +
-                //             "signature algorithm: " + currSigAlg,
-                //         null, null, -1, BasicReason.ALGORITHM_CONSTRAINED);
-                // }
+                if (!constraints.permits(SIGNATURE_PRIMITIVE_SET,
+                    currSigAlg, currSigAlgParams)) {
+                    throw new CertPathValidatorException(
+                        "Algorithm constraints check failed on " +
+                            "signature algorithm: " + currSigAlg,
+                        null, null, -1, BasicReason.ALGORITHM_CONSTRAINED);
+                }
             }
             throw new RuntimeException("failure");
             // // Assume all key usage bits are set if key usage is not present

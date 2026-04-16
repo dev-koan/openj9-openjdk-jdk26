@@ -404,11 +404,13 @@ final class SSLAlgorithmConstraints implements AlgorithmConstraints {
                 throw new IllegalArgumentException(
                         "No cryptographic primitive specified");
             }
-
+            System.out.println(supportedAlgorithms.size());
             if (supportedAlgorithms == null || supportedAlgorithms.isEmpty()) {
                 return false;
             }
-
+            for (String sa : supportedAlgorithms) {
+                System.out.println(sa);
+            }
             return supportedAlgorithms.contains(algorithm);
         }
 
