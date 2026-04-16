@@ -199,54 +199,51 @@ public final class AlgorithmChecker extends PKIXCertPathChecker {
         AlgorithmParameters currSigAlgParams = algorithmId.getParameters();
         PublicKey currPubKey = cert.getPublicKey();
         String currSigAlg = x509Cert.getSigAlgName();
-        System.out.println(currSigAlgParams.toString());
-        System.out.println(currSigAlgParams.getAlgorithm());
-        System.out.println(currSigAlgParams.getProvider());
         System.out.println(currPubKey.toString());
         System.out.println(currPubKey.getAlgorithm());
         System.out.println(currSigAlg);
 
 
         if (constraints instanceof DisabledAlgorithmConstraints dac) {
-            System.out.println("here in instanceof block");
-            // throw new RuntimeException("failure");
-            // if (prevPubKey != null && prevPubKey == trustedPubKey) {
-            //     // check constraints of trusted public key (make sure
-            //     // algorithm and size is not restricted)
-            //     CertPathConstraintsParameters cp =
-            //         new CertPathConstraintsParameters(trustedPubKey, variant,
-            //             anchor, date);
-            //     dac.permits(KeyUtil.getAlgorithm(trustedPubKey),
-            //         cp, true);
-            // }
-            // // Check the signature algorithm and parameters against constraints
-            // CertPathConstraintsParameters cp =
-            //     new CertPathConstraintsParameters(x509Cert, variant,
-            //         anchor, date);
-            // dac.permits(currSigAlg, currSigAlgParams, cp, true);
+            if (prevPubKey != null && prevPubKey == trustedPubKey) {
+                // check constraints of trusted public key (make sure
+                // algorithm and size is not restricted)
+                CertPathConstraintsParameters cp =
+                    new CertPathConstraintsParameters(trustedPubKey, variant,
+                        anchor, date);
+                dac.permits(KeyUtil.getAlgorithm(trustedPubKey),
+                    cp, true);
+            }
+            // Check the signature algorithm and parameters against constraints
+            CertPathConstraintsParameters cp =
+                new CertPathConstraintsParameters(x509Cert, variant,
+                    anchor, date);
+            dac.permits(currSigAlg, currSigAlgParams, cp, true);
         } else {
             System.out.println("here in non instanceof block");
+            if (prevPubKey != null) {
+                System.out.println("here in prevpubkey not null block");
+                // if (!constraints.permits(SIGNATURE_PRIMITIVE_SET,
+                //     currSigAlg, prevPubKey, currSigAlgParams)) {
+                //     throw new CertPathValidatorException(
+                //         "Algorithm constraints check failed on " +
+                //             currSigAlg + " signature and " +
+                //             currPubKey.getAlgorithm() + " key with size of " +
+                //             sun.security.util.KeyUtil.getKeySize(currPubKey) +
+                //             "bits",
+                //         null, null, -1, BasicReason.ALGORITHM_CONSTRAINED);
+                // }
+            } else {
+                System.out.println("here in prevpubkey null block");
+                // if (!constraints.permits(SIGNATURE_PRIMITIVE_SET,
+                //     currSigAlg, currSigAlgParams)) {
+                //     throw new CertPathValidatorException(
+                //         "Algorithm constraints check failed on " +
+                //             "signature algorithm: " + currSigAlg,
+                //         null, null, -1, BasicReason.ALGORITHM_CONSTRAINED);
+                // }
+            }
             throw new RuntimeException("failure");
-            // if (prevPubKey != null) {
-            //     if (!constraints.permits(SIGNATURE_PRIMITIVE_SET,
-            //         currSigAlg, prevPubKey, currSigAlgParams)) {
-            //         throw new CertPathValidatorException(
-            //             "Algorithm constraints check failed on " +
-            //                 currSigAlg + " signature and " +
-            //                 currPubKey.getAlgorithm() + " key with size of " +
-            //                 sun.security.util.KeyUtil.getKeySize(currPubKey) +
-            //                 "bits",
-            //             null, null, -1, BasicReason.ALGORITHM_CONSTRAINED);
-            //     }
-            // } else {
-            //     if (!constraints.permits(SIGNATURE_PRIMITIVE_SET,
-            //         currSigAlg, currSigAlgParams)) {
-            //         throw new CertPathValidatorException(
-            //             "Algorithm constraints check failed on " +
-            //                 "signature algorithm: " + currSigAlg,
-            //             null, null, -1, BasicReason.ALGORITHM_CONSTRAINED);
-            //     }
-            // }
             // // Assume all key usage bits are set if key usage is not present
             // Set<CryptoPrimitive> primitives = KU_PRIMITIVE_SET;
 
