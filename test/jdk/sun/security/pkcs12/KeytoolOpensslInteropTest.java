@@ -45,18 +45,6 @@
  * @run main/othervm/timeout=480 KeytoolOpensslInteropTest true
  */
 
-/*
- * @test id=UseExistingPKCS12
- * @bug 8076190 8242151 8153005 8266182
- * @summary This is java keytool <-> openssl interop test. This test uses
- *          the existing PKCS12 files located in ./params dir and java operates on it
- *
- * @modules java.base/sun.security.pkcs
- *          java.base/sun.security.util
- * @library /test/lib /sun/security/pkcs11/
- * @run main/othervm/timeout=480 KeytoolOpensslInteropTest false
- */
-
 import jdk.test.lib.Asserts;
 import jdk.test.lib.SecurityTools;
 import jdk.test.lib.process.ProcessTools;
@@ -85,6 +73,7 @@ import static sun.security.pkcs.ContentInfo.*;
 public class KeytoolOpensslInteropTest {
 
     public static void main(String[] args) throws Throwable {
+        System.out.println("in program");
         boolean generatePKCS12 = Boolean.parseBoolean(args[0]);
         if (generatePKCS12) {
             String opensslPath = OpensslArtifactFetcher.getOpensslPath();
@@ -146,9 +135,10 @@ public class KeytoolOpensslInteropTest {
                 "AES-256-CBC", "-macalg", "SHA512")
                 .shouldHaveExitValue(0);
 
-        if (Security.getProperty("com.ibm.fips.mode") != null) {
-            return;
-        }
+        // if (Security.getProperty("com.ibm.fips.mode") != null) {
+        //     return;
+        // }
+        System.out.println("about to generate os6");
         ProcessTools.executeCommand(opensslPath, "pkcs12", "-export", "-in",
                         "kandc", "-out", "os6", "-name", "a", "-passout",
                         "pass:changeit", "-pbmac1_pbkdf2", "-macalg", "sha256")
@@ -183,9 +173,9 @@ public class KeytoolOpensslInteropTest {
         // no storepass no cert
         check("os5", "a", null, "changeit", true, false, true);
 
-        if (Security.getProperty("com.ibm.fips.mode") == null) {
-            check("os6", "a", "changeit", "changeit", true, true, true);
-        }
+        // if (Security.getProperty("com.ibm.fips.mode") == null) {
+        check("os6", "a", "changeit", "changeit", true, true, true);
+        // }
 
         // keytool
 
