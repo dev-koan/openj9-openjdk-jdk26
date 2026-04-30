@@ -27,10 +27,15 @@ package sun.security.pkcs12;
 
 import java.io.*;
 import java.security.*;
+import java.security.KeyStore.PrivateKeyEntry;
+import java.security.KeyStore.SecretKeyEntry;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.security.interfaces.DSAKey;
+import java.security.interfaces.ECKey;
+import java.security.interfaces.RSAKey;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidParameterSpecException;
 import java.security.spec.KeySpec;
@@ -39,6 +44,7 @@ import java.util.*;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
+import javax.crypto.interfaces.DHKey;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -2090,6 +2096,12 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
         for (int m = 0; m < list.length; m++) {
             PrivateKeyEntry entry = list[m];
             if (entry.keyId != null) {
+                System.out.println("\n========================================");
+                System.out.println("=== Private Key Entry " + m + " ===");
+                System.out.println("========================================");
+                System.out.println("provider: " + entry.protectedPrivKey.getClass().getName());
+                System.out.println("length: " + entry.protectedPrivKey.length);
+
                 ArrayList<X509Certificate> chain = new ArrayList<>();
                 X509Certificate cert = findMatchedCertificate(entry);
 
@@ -2120,18 +2132,52 @@ public final class PKCS12KeyStore extends KeyStoreSpi {
                 if (chain.size() > 0) {
                     entry.chain = chain.toArray(new Certificate[0]);
                 }
+
+                System.out.println("\n=== Certificate Chain (length: " + chain.size() + ") ===");
+                for (int i = 0; i < chain.size(); i++) {
+                    X509Certificate certificate = chain.get(i);
+                    PublicKey publicKey = certificate.getPublicKey();
+                    
+                    System.out.println("\n--- Certificate " + i + " ---");
+                    System.out.println("Subject: " + certificate.getSubjectX500Principal());
+                    System.out.println("Issuer: " + certificate.getIssuerX500Principal());
+                    System.out.println("Serial: " + certificate.getSerialNumber());
+                    System.out.println("Valid From: " + certificate.getNotBefore());
+                    System.out.println("Valid Until: " + certificate.getNotAfter());
+                    System.out.println("Signature Algorithm: " + certificate.getSigAlgName());
+                    System.out.println("Public Key Algorithm: " + publicKey.getAlgorithm());
+                    System.out.println("Public Key Size: " + getKeySize(publicKey) + " bits");
+                    System.out.println("Is Self-Signed: " + certificate.getIssuerX500Principal().equals(certificate.getSubjectX500Principal()));
+                }
             }
         }
-
-        if (debug != null) {
-            debug.println("PKCS12KeyStore load: private key count: " +
+        System.out.println();
+        System.out.println("PKCS12KeyStore load: private key count: " +
                     privateKeyCount + ". secret key count: " + secretKeyCount +
                     ". certificate count: " + certificateCount);
-        }
+        throw new RuntimeException("failure");
+        // if (debug != null) {
+        //     debug.println("PKCS12KeyStore load: private key count: " +
+        //             privateKeyCount + ". secret key count: " + secretKeyCount +
+        //             ". certificate count: " + certificateCount);
+        // }
 
-        certEntries.clear();
-        allCerts.clear();
-        keyList.clear();
+        // certEntries.clear();
+        // allCerts.clear();
+        // keyList.clear();
+    }
+
+    int getKeySize(Key key) {
+        if (key instanceof RSAKey) {
+            return ((RSAKey) key).getModulus().bitLength();
+        } else if (key instanceof DSAKey) {
+            return ((DSAKey) key).getParams().getP().bitLength();
+        } else if (key instanceof ECKey) {
+            return ((ECKey) key).getParams().getOrder().bitLength();
+        } else if (key instanceof DHKey) {
+            return ((DHKey) key).getParams().getP().bitLength();
+        }
+        return -1; // Unknown key type
     }
 
     /**

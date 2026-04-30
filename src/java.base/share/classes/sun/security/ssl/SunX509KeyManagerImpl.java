@@ -47,7 +47,6 @@ import javax.net.ssl.SNIServerName;
 import javax.net.ssl.SSLEngine;
 import javax.security.auth.x500.X500Principal;
 
-import com.ibm.crypto.plus.provider.RSAUtil.KeyType;
 
 
 /**
@@ -106,7 +105,6 @@ final class SunX509KeyManagerImpl extends X509KeyManagerCertChecking {
         if (ks == null) {
             return;
         }
-
         for (Enumeration<String> aliases = ks.aliases();
                 aliases.hasMoreElements(); ) {
             String alias = aliases.nextElement();
@@ -299,10 +297,6 @@ final class SunX509KeyManagerImpl extends X509KeyManagerCertChecking {
 
         for (Map.Entry<String, X509Credentials> entry :
                 credentialsMap.entrySet()) {
-            System.out.println(entry.getKey());
-            for (X509Certificate c : entry.getValue().certificates) {
-                System.out.println(c.toString());
-            }
             EntryStatus status = checkAlias(0, entry.getKey(),
                     entry.getValue().certificates,
                     null, keyTypes, issuerSet, checkType,
