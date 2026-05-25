@@ -146,9 +146,6 @@ public class KeytoolOpensslInteropTest {
                 "AES-256-CBC", "-macalg", "SHA512")
                 .shouldHaveExitValue(0);
 
-        if (Security.getProperty("com.ibm.fips.mode") != null) {
-            return;
-        }
         ProcessTools.executeCommand(opensslPath, "pkcs12", "-export", "-in",
                         "kandc", "-out", "os6", "-name", "a", "-passout",
                         "pass:changeit", "-pbmac1_pbkdf2", "-macalg", "sha256")
@@ -183,9 +180,7 @@ public class KeytoolOpensslInteropTest {
         // no storepass no cert
         check("os5", "a", null, "changeit", true, false, true);
 
-        if (Security.getProperty("com.ibm.fips.mode") == null) {
-            check("os6", "a", "changeit", "changeit", true, true, true);
-        }
+        check("os6", "a", "changeit", "changeit", true, true, true);
 
         // keytool
 
