@@ -299,6 +299,10 @@ RestrictedSecurity.OpenJCEPlusFIPS.FIPS140-3.jce.provider.1 = com.ibm.crypto.plu
     {Mac, HmacSHA3-512, *}, \
     {Mac, HmacSHA384, *}, \
     {Mac, HmacSHA512, *}, \
+    {Mac, HmacPBESHA384, *}, \
+    {Mac, HmacPBESHA512, *}, \
+    {Mac, HmacPBESHA512/224, *}, \
+    {Mac, HmacPBESHA512/256, *}, \
     {MessageDigest, MD5, *, ModuleAndFullClassName:java.base/java.util.UUID}, \
     {MessageDigest, SHA-1, *, ModuleAndFullClassName:java.base/java.io.ObjectStreamClass}, \
     {MessageDigest, SHA-224, *}, \
@@ -419,10 +423,6 @@ RestrictedSecurity.OpenJCEPlusFIPS.FIPS140-3-Strongly-Enforced.jce.provider.4 = 
     {Mac, HmacPBESHA1, *, ModuleAndFullClassName:java.base/sun.security.pkcs12.PKCS12KeyStore}, \
     {Mac, HmacPBESHA224, *, ModuleAndFullClassName:java.base/sun.security.pkcs12.PKCS12KeyStore}, \
     {Mac, HmacPBESHA256, *, ModuleAndFullClassName:java.base/sun.security.pkcs12.PKCS12KeyStore}, \
-    {Mac, HmacPBESHA384, *, ModuleAndFullClassName:java.base/sun.security.pkcs12.PKCS12KeyStore}, \
-    {Mac, HmacPBESHA512, *, ModuleAndFullClassName:java.base/sun.security.pkcs12.PKCS12KeyStore}, \
-    {Mac, HmacPBESHA512/224, *, ModuleAndFullClassName:java.base/sun.security.pkcs12.PKCS12KeyStore}, \
-    {Mac, HmacPBESHA512/256, *, ModuleAndFullClassName:java.base/sun.security.pkcs12.PKCS12KeyStore}, \
     {SecretKeyFactory, PBE, *, ModuleAndFullClassName:java.base/sun.security.pkcs12.PKCS12KeyStore}, \
     {SecretKeyFactory, PBEWithHmacSHA1AndAES_128, *, ModuleAndFullClassName:java.base/sun.security.pkcs12.PKCS12KeyStore}, \
     {SecretKeyFactory, PBEWithHmacSHA1AndAES_256, *, ModuleAndFullClassName:java.base/sun.security.pkcs12.PKCS12KeyStore}, \
